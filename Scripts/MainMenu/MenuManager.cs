@@ -5,9 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField] private GameObject canvas;
+    private GameObject canvas;
 
     [SerializeField] private GameObject screenLock;
+
+
+    private void AssingCanvas()
+    {
+        canvas = GameObject.Find("Canvas");
+    }
 
 
     public void ChangeScene(string sceneName)
@@ -18,7 +24,19 @@ public class MenuManager : MonoBehaviour
 
     public void OpenMenu(GameObject menu)
     {
+        AssingCanvas();
+
         Instantiate(screenLock, canvas.transform);
         Instantiate(menu, canvas.transform);
+    }
+
+
+    public void CloseMenu()
+    {
+        AssingCanvas();
+
+        foreach (Transform child in canvas.transform)
+            if(child.gameObject.tag == "MenuElement")
+                Destroy(child.gameObject);
     }
 }
