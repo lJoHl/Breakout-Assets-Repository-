@@ -6,16 +6,19 @@ using UnityEngine.UI;
 
 public class ChangeKey : MonoBehaviour
 {
-    private Button button;
+    private enum Controls { MoveLeft, MoveRight, ThrowBall, Pause }
+    [SerializeField] private Controls controls;
+        
+    private Button controlButton;
 
     private bool buttonSelected;
 
 
-    private void Start()
+    private void Awake()
     {
-        button = GetComponent<Button>();
+        controlButton = GetComponent<Button>();
 
-        button.onClick.AddListener(Selected);
+        controlButton.onClick.AddListener(Selected);
     }
 
 
@@ -23,20 +26,76 @@ public class ChangeKey : MonoBehaviour
     {
         buttonSelected = true;
 
-        button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ""; 
+        SetControlButtonText("");
     }
 
 
-    public void OnGUI()
+    private void OnGUI()
     {
         Event e = Event.current;
 
         if (buttonSelected)
             if (e.isKey)
             {
-                button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = e.keyCode.ToString();
-
                 buttonSelected = false;
+
+                SetControlKey(e.keyCode);
             }
+    }
+
+
+    private void SetControlKey(KeyCode controlKey)
+    {
+        switch (controls)
+        {
+            case Controls.MoveLeft:
+                ControlsSettings.MoveLeftKey = controlKey;
+                break;
+
+            case Controls.MoveRight:
+                ControlsSettings.MoveRightKey = controlKey;
+                break;
+
+            case Controls.ThrowBall:
+                ControlsSettings.ThrowBallKey = controlKey;
+                break;
+
+            case Controls.Pause:
+                ControlsSettings.PauseKey = controlKey;
+                break;
+        }
+
+        SetControlButtonText(controlKey.ToString());
+    }
+
+    public void SetControlButtonText()
+    {
+        KeyCode controlButtonKeyCode = KeyCode.None;
+
+        switch (controls)
+        {
+            case Controls.MoveLeft:
+                controlButtonKeyCode = ControlsSettings.MoveLeftKey;
+                break;
+
+            case Controls.MoveRight:
+                controlButtonKeyCode = ControlsSettings.MoveRightKey;
+                break;
+
+            case Controls.ThrowBall:
+                controlButtonKeyCode = ControlsSettings.ThrowBallKey;
+                break;
+
+            case Controls.Pause:
+                controlButtonKeyCode = ControlsSettings.PauseKey;
+                break;
+        }
+
+        SetControlButtonText(controlButtonKeyCode.ToString());
+    }
+
+    private void SetControlButtonText(string keyString)
+    {
+        controlButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = keyString;
     }
 }

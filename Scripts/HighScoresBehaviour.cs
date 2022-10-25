@@ -24,7 +24,7 @@ public class HighScoresBehaviour : MonoBehaviour
 
     private void Start()
     {
-        dataPath = Application.persistentDataPath + "/savefile.json";
+        dataPath = Application.persistentDataPath + "/savehighscoresfile.json";
 
         LoadHighScores();
     }
