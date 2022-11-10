@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,11 +11,11 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
+    [SerializeField] private TextMeshProUGUI scoreText;     //inGame branch
     public GameObject GameOverText;
     
     private bool m_Started = false;
-    private int m_Points;
+    private int currentPoints;      //inGame Branch
     
     private bool m_GameOver = false;
 
@@ -33,7 +34,7 @@ public class MainManager : MonoBehaviour
                 Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
-                brick.onDestroyed.AddListener(AddPoint);
+                brick.onDestroyed.AddListener(AddPoints);
             }
         }
     }
@@ -62,10 +63,10 @@ public class MainManager : MonoBehaviour
         }
     }
 
-    void AddPoint(int point)
+    private void AddPoints(int points)      //inGame Branch
     {
-        m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        currentPoints += points;        //inGame Branch
+        scoreText.text = currentPoints.ToString();     //inGame Branch
     }
 
     public void GameOver()
