@@ -13,20 +13,18 @@ public class GameState : MonoBehaviour
 
     private void Update()
     {
+        // set game state and time scale, based on the existence of the pauseMenu
+        inGame = !GameObject.Find($"{pauseMenu.name}(Clone)");
+        Time.timeScale = inGame ? 1 : 0;
+
+
+        // handles the pauseMenu state, based on the game state. When "esc" is pressed
         if (Input.GetKeyDown(KeyCode.Escape))
-            PauseGame();
-    }
-
-
-    public void InGame(bool value)
-    {
-        Time.timeScale = value ? 1 : 0;
-    }
-
-
-    public void PauseGame()
-    {
-        InGame(false);
-        menuManager.OpenMenu(pauseMenu);
+        {
+            if (inGame)
+                menuManager.OpenMenu(pauseMenu);
+            else
+                menuManager.CloseMenu();
+        }
     }
 }
