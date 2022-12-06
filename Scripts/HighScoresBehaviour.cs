@@ -31,13 +31,13 @@ public class HighScoresBehaviour : MonoBehaviour
 
     
 
-    private void UpdateHighScores(string newName, int newScore)
+    public void UpdateHighScores(string newName, int newScore)      //inGame Branch
     {
         for (int i = 0; i < 5; i++)
         {
             int score = int.Parse(scores[i].text);
 
-            if (newScore > score)
+            if (newScore > score) // or newScore < score ?
                 continue;
 
             UpdateHighScores(names[i].text, score);
