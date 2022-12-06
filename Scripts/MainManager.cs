@@ -12,14 +12,15 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
-    public GameObject GameOverText;
-    
+    [SerializeField] private GameObject GameOverMenu;      //inGame Branch
+
     private bool m_Started = false;
     private int currentPoints;      //inGame Branch
     
     private bool m_GameOver = false;
 
     [SerializeField] private GameObject newHighScoreMenu;   //inGame Branch
+    [SerializeField] private MenuManager menuManager;   //inGame Branch
 
 
     // Start is called before the first frame update
@@ -74,7 +75,7 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
-        GameOverText.SetActive(true);
-        newHighScoreMenu.SetActive(true);   //inGame Branch
+        menuManager.OpenMenu(GameOverMenu);   //inGame Branch
+        //newHighScoreMenu.SetActive(true);   //inGame Branch
     }
 }
