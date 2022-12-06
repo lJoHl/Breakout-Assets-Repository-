@@ -6,15 +6,16 @@ using UnityEngine;
 public class RecordScore : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI newScore;
-
     [SerializeField] private TMP_InputField newName;
 
+    private MainManager mainManager;
     [SerializeField] private HighScoresBehaviour highScoresBehaviour;
-    [SerializeField] private MainManager mainManager;
 
 
     private void Start()
     {
+        mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
+
         newScore.text = mainManager.scoreText.text;
     }
 
