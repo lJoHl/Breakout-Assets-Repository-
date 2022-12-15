@@ -14,18 +14,47 @@ public class MainManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
     [SerializeField] private GameObject GameOverMenu;      //inGame Branch
 
-    private bool m_Started = false;
+    private bool m_Started;     //inGame Branch
     private int currentPoints;      //inGame Branch
     
-    private bool m_GameOver = false;
+    private bool m_GameOver;    //inGame Branch
 
     [SerializeField] private GameObject newHighScoreMenu;   //inGame Branch
     [SerializeField] private MenuManager menuManager;   //inGame Branch
+
+    [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
+    public int currentLevel = 1;       //inGame Branch
+
+    private static MainManager instance;    //inGame Branch
+
+    [SerializeField] private GameObject canvas; //inGame Branch
+    [SerializeField] private GameObject gameOverCanvas; //inGame Branch
+
+
+    private void Awake()    //inGame Branch
+    {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            Destroy(canvas);
+
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(canvas);
+    }
 
 
     // Start is called before the first frame update
     void Start()
     {
+        m_Started = false;  //inGame Branch
+        m_GameOver = false; //inGame Branch
+
+        Ball = GameObject.Find("Ball").GetComponent<Rigidbody>();   //inGame Branch
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -38,8 +67,10 @@ public class MainManager : MonoBehaviour
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
                 brick.onDestroyed.AddListener(AddPoints);
+                brick.onAllDestroyed.AddListener(LevelCompleted);
             }
         }
+
     }
 
     private void Update()
@@ -72,10 +103,40 @@ public class MainManager : MonoBehaviour
         scoreText.text = currentPoints.ToString();     //inGame Branch
     }
 
+
+    public void LevelCompleted()   //inGame Branch
+    {
+        // Change this
+
+        currentLevel++;
+        levelText.text = currentLevel.ToString();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(WaitForStart());
+
+        IEnumerator WaitForStart()
+        {
+            yield return new WaitForSeconds(0.1f);
+            Start();
+        }
+    }
+
+
     public void GameOver()
     {
         m_GameOver = true;
-        menuManager.OpenMenu(GameOverMenu);   //inGame Branch
-        //newHighScoreMenu.SetActive(true);   //inGame Branch
+
+        Destroy(canvas);        //inGame Branch
+        StartCoroutine(WaitForGameOverMenu());   //inGame Branch
+        Destroy(gameObject, .2f);    //inGame Branch
+
+
+        IEnumerator WaitForGameOverMenu()    //inGame Branch
+        {
+            yield return new WaitForSeconds(.1f);
+
+            Instantiate(gameOverCanvas);
+            menuManager.OpenMenu(GameOverMenu);   //inGame Branch
+        }
     }
 }
