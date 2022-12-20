@@ -23,12 +23,16 @@ public class MainManager : MonoBehaviour
     [SerializeField] private MenuManager menuManager;   //inGame Branch
 
     [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
-    public int currentLevel = 1;       //inGame Branch
+    private int currentLevel = 1;       //inGame Branch
 
     private static MainManager instance;    //inGame Branch
 
     [SerializeField] private GameObject canvas; //inGame Branch
     [SerializeField] private GameObject gameOverCanvas; //inGame Branch
+
+    public float lives = 1;
+    [SerializeField] private GameObject life;
+    [SerializeField] private float xDefaultIncrement;
 
 
     private void Awake()    //inGame Branch
@@ -54,6 +58,8 @@ public class MainManager : MonoBehaviour
         m_GameOver = false; //inGame Branch
 
         Ball = GameObject.Find("Ball").GetComponent<Rigidbody>();   //inGame Branch
+
+        UpdateLives();  //inGame Branch
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -104,10 +110,34 @@ public class MainManager : MonoBehaviour
     }
 
 
+    private void UpdateLives()  //inGame Branch
+    {
+        foreach (GameObject life in GameObject.FindGameObjectsWithTag("Life"))
+            Destroy(life);
+
+        for (float i = 1; i <= lives; i++)
+        {
+            Vector3 lifePosition = life.transform.position;
+            float xIncrement;
+
+
+            if (lives % 2 == 0)
+                xIncrement = (Mathf.Ceil(i / 2) * 2 - 1) * xDefaultIncrement / 2;
+            else
+                xIncrement = Mathf.Floor(i / 2) * xDefaultIncrement;
+
+            xIncrement *= i % 2 == 0 ? 1 : -1;
+            lifePosition.x += xIncrement;
+
+            Instantiate(life, lifePosition, life.transform.rotation);
+        }
+    }
+
+
     public void LevelCompleted()   //inGame Branch
     {
         // Change this
-
+        lives++;    
         currentLevel++;
         levelText.text = currentLevel.ToString();
 
