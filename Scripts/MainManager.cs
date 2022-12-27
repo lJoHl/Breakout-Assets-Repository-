@@ -11,6 +11,10 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject paddle;
+    private Vector3 paddleStartingPosition;
+
     [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
     [SerializeField] private GameObject GameOverMenu;      //inGame Branch
 
@@ -25,41 +29,21 @@ public class MainManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
     private int currentLevel = 1;       //inGame Branch
 
-    private static MainManager instance;    //inGame Branch
-
-    [SerializeField] private GameObject canvas; //inGame Branch
-    [SerializeField] private GameObject gameOverCanvas; //inGame Branch
-
     public float lives = 1;
     [SerializeField] private GameObject life;
     [SerializeField] private float xDefaultIncrement;
 
 
-    private void Awake()    //inGame Branch
+    private void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-            Destroy(canvas);
-
-            return;
-        }
-
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-        DontDestroyOnLoad(canvas);
+        paddleStartingPosition = paddle.transform.position;
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        m_Started = false;  //inGame Branch
-        m_GameOver = false; //inGame Branch
-
-        Ball = GameObject.Find("Ball").GetComponent<Rigidbody>();   //inGame Branch
-
-        UpdateLives();  //inGame Branch
+        NewBall();
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -76,7 +60,6 @@ public class MainManager : MonoBehaviour
                 brick.onAllDestroyed.AddListener(LevelCompleted);
             }
         }
-
     }
 
     private void Update()
@@ -102,6 +85,25 @@ public class MainManager : MonoBehaviour
             }
         }
     }
+
+
+    public void NewBall()  //inGame Branch
+    {
+        m_Started = false;
+
+        UpdateLives();
+        StartCoroutine(ResetPaddle());
+    }
+
+    private IEnumerator ResetPaddle()   //inGame Branch
+    {
+        paddle.transform.position = paddleStartingPosition;
+        yield return new WaitForSeconds(0);
+
+        Instantiate(ballPrefab, paddle.transform);
+        Ball = GameObject.Find("Ball(Clone)").GetComponent<Rigidbody>();   
+    }
+
 
     private void AddPoints(int points)      //inGame Branch
     {
@@ -141,14 +143,8 @@ public class MainManager : MonoBehaviour
         currentLevel++;
         levelText.text = currentLevel.ToString();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        StartCoroutine(WaitForStart());
-
-        IEnumerator WaitForStart()
-        {
-            yield return new WaitForSeconds(0.1f);
-            Start();
-        }
+        Destroy(GameObject.Find("Ball(Clone)"));
+        Start();
     }
 
 
@@ -156,17 +152,7 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
 
-        Destroy(canvas);        //inGame Branch
-        StartCoroutine(WaitForGameOverMenu());   //inGame Branch
-        Destroy(gameObject, .2f);    //inGame Branch
-
-
-        IEnumerator WaitForGameOverMenu()    //inGame Branch
-        {
-            yield return new WaitForSeconds(.1f);
-
-            Instantiate(gameOverCanvas);
-            menuManager.OpenMenu(GameOverMenu);   //inGame Branch
-        }
+        menuManager.OpenMenu(GameOverMenu);   //inGame Branch
+        UpdateLives();
     }
 }

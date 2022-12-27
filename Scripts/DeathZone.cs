@@ -15,6 +15,11 @@ public class DeathZone : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         Destroy(other.gameObject);
-        Manager.GameOver();
+        Manager.lives--;
+
+        if (Manager.lives > 0)
+            Manager.NewBall();
+        else
+            Manager.GameOver();
     }
 }
