@@ -53,11 +53,16 @@ public class MainManager : MonoBehaviour
         {
             for (int x = 0; x < perLine; ++x)
             {
-                Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
-                var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
-                brick.PointValue = pointCountArray[i];
-                brick.onDestroyed.AddListener(AddPoints);
-                brick.onAllDestroyed.AddListener(LevelCompleted);
+                bool instantiateBrick = currentLevel > 1 ? Random.value < .5f : true;
+
+                if (instantiateBrick)
+                {
+                    Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
+                    var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
+                    brick.PointValue = pointCountArray[i];
+                    brick.onDestroyed.AddListener(AddPoints);
+                    brick.onAllDestroyed.AddListener(LevelCompleted);
+                }
             }
         }
     }
