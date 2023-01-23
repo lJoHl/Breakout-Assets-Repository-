@@ -7,11 +7,23 @@ public class Ball : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;
 
+    private ComboBehaviour comboBehaviour;
+
+
     void Start()
     {
+        comboBehaviour = GameObject.Find("MainManager").GetComponent<ComboBehaviour>();
+
         m_Rigidbody = GetComponent<Rigidbody>();
     }
-    
+
+
+    private void OnCollisionEnter(Collision collision)  //inGame Branch
+    {
+        if (collision.gameObject == GameObject.Find("Paddle"))
+            comboBehaviour.breakCombo();
+    }
+
     private void OnCollisionExit(Collision other)
     {
         var velocity = m_Rigidbody.velocity;

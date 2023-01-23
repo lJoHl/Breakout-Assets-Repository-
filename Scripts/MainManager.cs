@@ -29,13 +29,17 @@ public class MainManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
     private int currentLevel = 1;       //inGame Branch
 
-    public float lives = 1;
-    [SerializeField] private GameObject life;
-    [SerializeField] private float xDefaultIncrement;
+    public float lives = 1; //inGame Branch
+    [SerializeField] private GameObject life;   //inGame Branch
+    [SerializeField] private float xDefaultIncrement; //inGame Branch
+
+    private ComboBehaviour comboBehaviour;  //inGame Branch
 
 
-    private void Awake()
+    private void Awake() //inGame Branch
     {
+        comboBehaviour = gameObject.GetComponent<ComboBehaviour>();
+
         paddleStartingPosition = paddle.transform.position;
     }
 
@@ -43,7 +47,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NewBall();
+        NewBall();  //inGame Branch
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -95,6 +99,7 @@ public class MainManager : MonoBehaviour
     public void NewBall()  //inGame Branch
     {
         m_Started = false;
+        comboBehaviour.breakCombo();
 
         UpdateLives();
         StartCoroutine(ResetPaddle());
@@ -112,8 +117,12 @@ public class MainManager : MonoBehaviour
 
     private void AddPoints(int points)      //inGame Branch
     {
+        if (comboBehaviour.hasMultiplierReached2) points *= comboBehaviour.getMultiplier(); //inGame Branch
+
         currentPoints += points;        //inGame Branch
         scoreText.text = currentPoints.ToString();     //inGame Branch
+
+        comboBehaviour.increaseMultiplier();
     }
 
 
@@ -158,6 +167,6 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
 
         menuManager.OpenMenu(GameOverMenu);   //inGame Branch
-        UpdateLives();
+        UpdateLives();  //inGame Branch
     }
 }
