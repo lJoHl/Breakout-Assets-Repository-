@@ -11,9 +11,11 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private GameObject paddle;
-    private Vector3 paddleStartingPosition;
+    [SerializeField] private GameObject ballPrefab; //inGame branch
+    private float ballScaleX = .15f;    //inGame branch
+    [SerializeField] private Transform paddle; //inGame branch
+    private Vector3 paddleStartingPosition;     //inGame branch
+    private Vector3 paddleStartingScale;     //inGame branch
 
     [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
     [SerializeField] private GameObject GameOverMenu;      //inGame Branch
@@ -40,7 +42,8 @@ public class MainManager : MonoBehaviour
     {
         comboBehaviour = gameObject.GetComponent<ComboBehaviour>();
 
-        paddleStartingPosition = paddle.transform.position;
+        paddleStartingPosition = paddle.position;
+        paddleStartingScale = paddle.localScale;
     }
 
 
@@ -57,15 +60,15 @@ public class MainManager : MonoBehaviour
         {
             for (int x = 0; x < perLine; ++x)
             {
-                bool instantiateBrick = currentLevel > 1 ? Random.value < .5f : true;
+                bool instantiateBrick = currentLevel <= 1 | Random.value < .5f; //inGame Branch
 
-                if (instantiateBrick)
+                if (instantiateBrick)   //inGame Branch
                 {
                     Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                     var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                     brick.PointValue = pointCountArray[i];
                     brick.onDestroyed.AddListener(AddPoints);
-                    brick.onAllDestroyed.AddListener(LevelCompleted);
+                    brick.onAllDestroyed.AddListener(LevelCompleted);   //inGame Branch
                 }
             }
         }
@@ -107,11 +110,21 @@ public class MainManager : MonoBehaviour
 
     private IEnumerator ResetPaddle()   //inGame Branch
     {
-        paddle.transform.position = paddleStartingPosition;
+        paddle.position = paddleStartingPosition;
+        paddle.localScale = paddleStartingScale;
+
         yield return new WaitForSeconds(0);
 
-        Instantiate(ballPrefab, paddle.transform);
-        Ball = GameObject.Find("Ball(Clone)").GetComponent<Rigidbody>();   
+        Vector3 paddleScale = new Vector3(ChangeDifficultyParameter(paddle.localScale.x, 5, .075f, false), .1f, 1);
+        paddle.localScale = paddleScale;
+
+        yield return new WaitForSeconds(0);
+
+        Instantiate(ballPrefab, paddle);
+        Ball = GameObject.Find("Ball(Clone)").GetComponent<Rigidbody>();
+
+        Vector3 ballScale = new Vector3(ballScaleX / paddle.localScale.x, ballScaleX * 10, ballScaleX);
+        Ball.gameObject.transform.localScale = ballScale;
     }
 
 
@@ -159,6 +172,16 @@ public class MainManager : MonoBehaviour
 
         Destroy(GameObject.Find("Ball(Clone)"));
         Start();
+    }
+
+
+    public float ChangeDifficultyParameter(float parameter, int multiple, float amount, bool isAnIncrease)
+    {
+        int difficultyLevel = currentLevel < 20 ? currentLevel : 20; //change 20 for getMaxLevel
+
+        parameter += Mathf.Floor(difficultyLevel / multiple) * (isAnIncrease ? amount : -amount);
+
+        return parameter;
     }
 
 
