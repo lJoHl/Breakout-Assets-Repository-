@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AdjustableParameters : MonoBehaviour
 {
-    private int maxLive;
-    private int startLevel;
+    private int maxLive = 5;
+    private int startLevel = 1;
 
     private bool atLowLimit;
     private bool atUpLimit;
@@ -17,14 +18,34 @@ public class AdjustableParameters : MonoBehaviour
     private TextMeshProUGUI livesCounter;
     private TextMeshProUGUI levelsCounter;
 
+    private static AdjustableParameters instance;
 
-    private void Start()
+
+    private void Awake()
     {
-        maxLive = 5;
-        startLevel = 1;
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        livesCounter = GetFirstChild("MaxLives").GetComponent<TextMeshProUGUI>();
-        levelsCounter = GetFirstChild("StartLevel").GetComponent<TextMeshProUGUI>();
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+
+    private void Update()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        if (currentScene.name == "MainMenu")
+        {
+            livesCounter = GetFirstChild("MaxLives").GetComponent<TextMeshProUGUI>();
+            levelsCounter = GetFirstChild("StartLevel").GetComponent<TextMeshProUGUI>();
+
+            livesCounter.text = maxLive.ToString();
+            levelsCounter.text = startLevel.ToString();
+        }
     }
 
     private GameObject GetFirstChild(string parentGameObject)
@@ -40,12 +61,10 @@ public class AdjustableParameters : MonoBehaviour
         {
             case "MaxLives":
                 maxLive = UpdateCounter(maxLive, maxLives, isAnIncrease);
-                livesCounter.text = maxLive.ToString();
                 break;
 
             case "StartLevels":
                 startLevel = UpdateCounter(startLevel, startLevels, isAnIncrease);
-                levelsCounter.text = startLevel.ToString();
                 break;
         }
     }
@@ -86,5 +105,10 @@ public class AdjustableParameters : MonoBehaviour
     public int getStartLevel()
     {
         return startLevel;
+    }
+
+    public int getMaxStartLevel()
+    {
+        return startLevels[^1];
     }
 }

@@ -29,21 +29,25 @@ public class MainManager : MonoBehaviour
     [SerializeField] private MenuManager menuManager;   //inGame Branch
 
     [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
-    private int currentLevel = 1;       //inGame Branch
+    private int currentLevel;       //inGame Branch
 
     public float lives = 1; //inGame Branch
     [SerializeField] private GameObject life;   //inGame Branch
     [SerializeField] private float xDefaultIncrement; //inGame Branch
 
     private ComboBehaviour comboBehaviour;  //inGame Branch
+    private AdjustableParameters adjustParams;
 
 
     private void Awake() //inGame Branch
     {
         comboBehaviour = gameObject.GetComponent<ComboBehaviour>();
+        adjustParams = GameObject.Find("AdjustableParameters").GetComponent<AdjustableParameters>();
 
         paddleStartingPosition = paddle.position;
         paddleStartingScale = paddle.localScale;
+
+        currentLevel = adjustParams.getStartLevel();
     }
 
 
@@ -51,6 +55,7 @@ public class MainManager : MonoBehaviour
     void Start()
     {
         NewBall();  //inGame Branch
+        UpdateLevel();
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -60,7 +65,7 @@ public class MainManager : MonoBehaviour
         {
             for (int x = 0; x < perLine; ++x)
             {
-                bool instantiateBrick = currentLevel <= 1 | Random.value < .5f; //inGame Branch
+                bool instantiateBrick = currentLevel <= adjustParams.getStartLevel() | Random.value < .5f; //inGame Branch
 
                 if (instantiateBrick)   //inGame Branch
                 {
@@ -163,12 +168,16 @@ public class MainManager : MonoBehaviour
     }
 
 
+    private void UpdateLevel()  //delete?
+    {
+        levelText.text = currentLevel.ToString(); //Update level text
+    }
+
     public void LevelCompleted()   //inGame Branch
     {
         // Change this
-        lives++;    
+        if (lives < adjustParams.getMaxLive()) lives++;
         currentLevel++;
-        levelText.text = currentLevel.ToString();
 
         Destroy(GameObject.Find("Ball(Clone)"));
         Start();
@@ -177,7 +186,8 @@ public class MainManager : MonoBehaviour
 
     public float ChangeDifficultyParameter(float parameter, int multiple, float amount, bool isAnIncrease)
     {
-        int difficultyLevel = currentLevel < 20 ? currentLevel : 20; //change 20 for getMaxLevel
+        int difficultyLimit = adjustParams.getMaxStartLevel();
+        int difficultyLevel = currentLevel < difficultyLimit ? currentLevel : difficultyLimit;
 
         parameter += Mathf.Floor(difficultyLevel / multiple) * (isAnIncrease ? amount : -amount);
 
