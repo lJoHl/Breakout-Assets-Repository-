@@ -33,7 +33,7 @@ public class MainManager : MonoBehaviour
 
     public float lives = 1; //inGame Branch
     [SerializeField] private GameObject life;   //inGame Branch
-    [SerializeField] private float xDefaultIncrement; //inGame Branch
+    [SerializeField] private float lifePosXIncrement; //inGame Branch
 
     private ComboBehaviour comboBehaviour;  //inGame Branch
     private AdjustableParameters adjustParams;
@@ -156,9 +156,9 @@ public class MainManager : MonoBehaviour
 
 
             if (lives % 2 == 0)
-                xIncrement = (Mathf.Ceil(i / 2) * 2 - 1) * xDefaultIncrement / 2;
+                xIncrement = (Mathf.Ceil(i / 2) * 2 - 1) * lifePosXIncrement / 2;
             else
-                xIncrement = Mathf.Floor(i / 2) * xDefaultIncrement;
+                xIncrement = Mathf.Floor(i / 2) * lifePosXIncrement;
 
             xIncrement *= i % 2 == 0 ? 1 : -1;
             lifePosition.x += xIncrement;
