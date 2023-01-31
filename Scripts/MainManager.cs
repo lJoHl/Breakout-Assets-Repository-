@@ -57,6 +57,8 @@ public class MainManager : MonoBehaviour
         NewBall();  //inGame Branch
         UpdateLevel();
 
+        bool firstBrick = false;
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -65,15 +67,18 @@ public class MainManager : MonoBehaviour
         {
             for (int x = 0; x < perLine; ++x)
             {
+                bool noBricks = !firstBrick & x == perLine - 1 & i == LineCount -1;
                 bool instantiateBrick = currentLevel <= adjustParams.getStartLevel() | Random.value < .5f; //inGame Branch
 
-                if (instantiateBrick)   //inGame Branch
+                if (instantiateBrick | noBricks)   //inGame Branch
                 {
                     Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                     var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                     brick.PointValue = pointCountArray[i];
                     brick.onDestroyed.AddListener(AddPoints);
                     brick.onAllDestroyed.AddListener(LevelCompleted);   //inGame Branch
+
+                    firstBrick = true;
                 }
             }
         }
