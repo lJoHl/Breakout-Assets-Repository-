@@ -83,7 +83,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) & Ball != null)
             {
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
