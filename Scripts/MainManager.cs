@@ -67,7 +67,7 @@ public class MainManager : MonoBehaviour
         {
             for (int x = 0; x < perLine; ++x)
             {
-                bool noBricks = !firstBrick & x == perLine - 1 & i == LineCount -1;
+                bool noBricks = !firstBrick & x == perLine - 1 & i == LineCount - 1;
                 bool instantiateBrick = currentLevel <= adjustParams.getStartLevel() | Random.value < .5f; //inGame Branch
 
                 if (instantiateBrick | noBricks)   //inGame Branch
