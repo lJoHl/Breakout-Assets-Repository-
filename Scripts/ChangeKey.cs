@@ -65,7 +65,7 @@ public class ChangeKey : MonoBehaviour
                 break;
         }
 
-        SetControlButtonText(controlKey.ToString());
+        SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlKey));
     }
 
     public void SetControlButtonText()
@@ -91,7 +91,7 @@ public class ChangeKey : MonoBehaviour
                 break;
         }
 
-        SetControlButtonText(controlButtonKeyCode.ToString());
+        SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlButtonKeyCode));
     }
 
     private void SetControlButtonText(string keyString)
