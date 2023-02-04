@@ -49,52 +49,26 @@ public class ChangeKey : MonoBehaviour
         switch (controls)
         {
             case Controls.MoveLeft:
-                ControlsSettings.MoveLeftKey = controlKey;
+                ControlsSettings.moveLeftKey = controlKey;
                 break;
 
             case Controls.MoveRight:
-                ControlsSettings.MoveRightKey = controlKey;
+                ControlsSettings.moveRightKey = controlKey;
                 break;
 
             case Controls.ThrowBall:
-                ControlsSettings.ThrowBallKey = controlKey;
+                ControlsSettings.throwBallKey = controlKey;
                 break;
 
             case Controls.Pause:
-                ControlsSettings.PauseKey = controlKey;
+                ControlsSettings.pauseKey = controlKey;
                 break;
         }
 
         SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlKey));
     }
 
-    public void SetControlButtonText()
-    {
-        KeyCode controlButtonKeyCode = KeyCode.None;
-
-        switch (controls)
-        {
-            case Controls.MoveLeft:
-                controlButtonKeyCode = ControlsSettings.MoveLeftKey;
-                break;
-
-            case Controls.MoveRight:
-                controlButtonKeyCode = ControlsSettings.MoveRightKey;
-                break;
-
-            case Controls.ThrowBall:
-                controlButtonKeyCode = ControlsSettings.ThrowBallKey;
-                break;
-
-            case Controls.Pause:
-                controlButtonKeyCode = ControlsSettings.PauseKey;
-                break;
-        }
-
-        SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlButtonKeyCode));
-    }
-
-    private void SetControlButtonText(string keyString)
+    public void SetControlButtonText(string keyString)
     {
         controlButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = keyString;
     }

@@ -5,17 +5,15 @@ using UnityEngine;
 
 public class ControlsSettings : MonoBehaviour
 {
-    public static KeyCode MoveLeftKey { get; set; }
-    public static KeyCode MoveRightKey { get; set; }
-    public static KeyCode ThrowBallKey { get; set; }
-    public static KeyCode PauseKey { get; set; }
+    public KeyCode[] controls = new KeyCode[4];
+    private readonly KeyCode[] defaultControls = { KeyCode.A, KeyCode.D, KeyCode.Space, KeyCode.Escape };
 
-    private const KeyCode MoveLeftDefaultKey = KeyCode.A;
-    private const KeyCode MoveRightDefaultKey = KeyCode.D;
-    private const KeyCode ThrowBallDefaultKey = KeyCode.Space;
-    private const KeyCode PauseDefaultKey = KeyCode.Escape;
+    public static KeyCode moveLeftKey;
+    public static KeyCode moveRightKey;
+    public static KeyCode throwBallKey;
+    public static KeyCode pauseKey;
 
-    private string dataPath;
+    private static string dataPath;
 
 
     [System.Serializable] class ControlsData
@@ -30,23 +28,22 @@ public class ControlsSettings : MonoBehaviour
 
     private void Start()
     {
-        dataPath = Application.persistentDataPath + "/savecontrolsfile.json";
-
         LoadControls();
     }
 
 
     public void SaveControls()
     {
-        ControlsData controlsData = new ControlsData();
+        dataPath = Application.persistentDataPath + "/savecontrolsfile.json";
 
-        controlsData.moveLeftKey = MoveLeftKey;
-        controlsData.moveRightKey = MoveRightKey;
-        controlsData.throwBallKey = ThrowBallKey;
-        controlsData.pauseKey = PauseKey;
+        ControlsData controlsData = new();
+
+        controlsData.moveLeftKey = moveLeftKey;
+        controlsData.moveRightKey = moveRightKey;
+        controlsData.throwBallKey = throwBallKey;
+        controlsData.pauseKey = pauseKey;
 
         string json = JsonUtility.ToJson(controlsData);
-
         File.WriteAllText(dataPath, json);
     }
 
@@ -57,15 +54,14 @@ public class ControlsSettings : MonoBehaviour
             string json = File.ReadAllText(dataPath);
             ControlsData controlsData = JsonUtility.FromJson<ControlsData>(json);
 
-            MoveLeftKey = controlsData.moveLeftKey;
-            MoveRightKey = controlsData.moveRightKey;
-            ThrowBallKey = controlsData.throwBallKey;
-            PauseKey = controlsData.pauseKey;
+            moveLeftKey = controlsData.moveLeftKey;
+            moveRightKey = controlsData.moveRightKey;
+            throwBallKey = controlsData.throwBallKey;
+            pauseKey = controlsData.pauseKey;
+
+            SetControls();
         }
-        else
-        {
-            SetDefaultKeys();
-        }
+        else SetDefaultKeys();
 
         MatchButtonsToKeys();
     }
@@ -73,18 +69,34 @@ public class ControlsSettings : MonoBehaviour
 
     public void SetDefaultKeys()
     {
-        MoveLeftKey = MoveLeftDefaultKey;
-        MoveRightKey = MoveRightDefaultKey;
-        ThrowBallKey = ThrowBallDefaultKey;
-        PauseKey = PauseDefaultKey;
+        for (int i = 0; i < controls.Length; i++)
+            controls[i] = defaultControls[i];
+
+        SetKeys();
+    }
+
+    private void SetKeys() //put this code in SetDefaultKeys?
+    {
+        moveLeftKey = controls[0];
+        moveRightKey = controls[1];
+        throwBallKey = controls[2];
+        pauseKey = controls[3];
+    }
+
+    private void SetControls()
+    {
+        controls[0] = moveLeftKey;
+        controls[1] = moveRightKey;
+        controls[2] = throwBallKey;
+        controls[3] = pauseKey;
     }
 
     
     public void MatchButtonsToKeys()
     {
-        ChangeKey[] foundChangeKeyObjects = FindObjectsOfType<ChangeKey>();
+        ChangeKey[] changeKeyObjects = FindObjectsOfType<ChangeKey>();
 
-        foreach (ChangeKey changeKeyObject in foundChangeKeyObjects)
-            changeKeyObject.SetControlButtonText();
+        for (int i = changeKeyObjects.Length - 1, j = 0; i >= 0; i--, j++)
+            changeKeyObjects[i].SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controls[j]));
     }
 }
