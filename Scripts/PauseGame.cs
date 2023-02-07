@@ -18,7 +18,7 @@ public class PauseGame : MonoBehaviour
 
 
         // handles the pauseMenu state, based on the game state. When "esc" is pressed
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(ControlsSettings.pauseKey) & !GameObject.Find("ControlsMenu" + "(Clone)"))
         {
             if (paused)
                 menuManager.CloseMenu();

@@ -11,6 +11,9 @@ public class Paddle : MonoBehaviour
     private MainManager mainManager;
     private bool rescaled;
 
+    private bool lockLeft;
+    private bool lockRight;
+
     
     // Start is called before the first frame update
     void Start()
@@ -27,7 +30,10 @@ public class Paddle : MonoBehaviour
         Rescale();
 
 
-        float input = Input.GetAxis("Horizontal");
+        lockLeft = Input.GetKey(ControlsSettings.moveRightKey) & !lockRight;
+        lockRight = Input.GetKey(ControlsSettings.moveLeftKey) & !lockLeft;
+
+        float input = lockLeft ? 1 : lockRight ? -1 : 0;
 
         Vector3 pos = transform.position;
         pos.x += input * Speed * Time.deltaTime;

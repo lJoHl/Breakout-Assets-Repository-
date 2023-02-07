@@ -48,6 +48,7 @@ public class MainManager : MonoBehaviour
         paddleStartingScale = paddle.localScale;
 
         currentLevel = adjustParams.getStartLevel();
+        ControlsSettings.LoadControls();
     }
 
 
@@ -88,7 +89,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
-            if (Input.GetKeyDown(KeyCode.Space) & Ball != null)
+            if (Input.GetKeyDown(ControlsSettings.throwBallKey) & Ball != null)
             {
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
@@ -101,7 +102,7 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(ControlsSettings.throwBallKey))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }

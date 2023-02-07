@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ControlsSettings : MonoBehaviour
 {
-    public KeyCode[] controls = new KeyCode[4];
-    private readonly KeyCode[] defaultControls = { KeyCode.A, KeyCode.D, KeyCode.Space, KeyCode.Escape };
+    public static KeyCode[] controls = new KeyCode[4];
+    private static readonly KeyCode[] defaultControls = { KeyCode.A, KeyCode.D, KeyCode.Space, KeyCode.Escape };
 
     public static KeyCode moveLeftKey;
     public static KeyCode moveRightKey;
@@ -32,7 +32,7 @@ public class ControlsSettings : MonoBehaviour
     }
 
 
-    public void SaveControls()
+    public static void SaveControls()
     {
         dataPath = Application.persistentDataPath + "/savecontrolsfile.json";
 
@@ -47,7 +47,7 @@ public class ControlsSettings : MonoBehaviour
         File.WriteAllText(dataPath, json);
     }
 
-    public void LoadControls()
+    public static void LoadControls()
     {
         if (File.Exists(dataPath))
         {
@@ -67,15 +67,16 @@ public class ControlsSettings : MonoBehaviour
     }
 
 
-    public void SetDefaultKeys()
+    public static void SetDefaultKeys()
     {
         for (int i = 0; i < controls.Length; i++)
             controls[i] = defaultControls[i];
 
         SetKeys();
+        SaveControls();
     }
 
-    private void SetKeys() //put this code in SetDefaultKeys?
+    private static void SetKeys() //put this code in SetDefaultKeys?
     {
         moveLeftKey = controls[0];
         moveRightKey = controls[1];
@@ -83,7 +84,7 @@ public class ControlsSettings : MonoBehaviour
         pauseKey = controls[3];
     }
 
-    private void SetControls()
+    private static void SetControls()
     {
         controls[0] = moveLeftKey;
         controls[1] = moveRightKey;
@@ -92,7 +93,7 @@ public class ControlsSettings : MonoBehaviour
     }
 
     
-    public void MatchButtonsToKeys()
+    public static void MatchButtonsToKeys()
     {
         ChangeKey[] changeKeyObjects = FindObjectsOfType<ChangeKey>();
 

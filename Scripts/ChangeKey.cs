@@ -66,7 +66,7 @@ public class ChangeKey : MonoBehaviour
         }
 
         SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlKey));
-        GameObject.Find("ControlsMenu" + "(Clone)").GetComponent<ControlsSettings>().SaveControls();
+        ControlsSettings.SaveControls();
     }
 
     public void SetControlButtonText(string keyString)
