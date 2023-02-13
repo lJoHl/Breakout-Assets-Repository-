@@ -8,6 +8,8 @@ public class KeyCodesDictionaries : MonoBehaviour
 
     private static void AddKeyNamesEntries()
     {
+        keyNames.Add(KeyCode.None, "");
+
         keyNames.Add(KeyCode.Escape, "Esc");
         keyNames.Add(KeyCode.Delete, "Supr");
         keyNames.Add(KeyCode.Return, "Enter");
