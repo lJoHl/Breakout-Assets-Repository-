@@ -49,23 +49,22 @@ public class ChangeKey : MonoBehaviour
         switch (controls)
         {
             case Controls.MoveLeft:
-                ControlsSettings.moveLeftKey = controlKey;
+                ControlsSettings.ReassingKey(ControlsSettings.moveLeftKey, controlKey);
                 break;
 
             case Controls.MoveRight:
-                ControlsSettings.moveRightKey = controlKey;
+                ControlsSettings.ReassingKey(ControlsSettings.moveRightKey, controlKey);
                 break;
 
             case Controls.ThrowBall:
-                ControlsSettings.throwBallKey = controlKey;
+                ControlsSettings.ReassingKey(ControlsSettings.throwBallKey, controlKey);
                 break;
 
             case Controls.Pause:
-                ControlsSettings.pauseKey = controlKey;
+                ControlsSettings.ReassingKey(ControlsSettings.pauseKey, controlKey);
                 break;
         }
 
-        SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controlKey));
         ControlsSettings.SaveControls();
     }
 

@@ -1585,7 +1585,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce42b54e6430f27448eec4ed0a366daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controls: 00000000000000000000000000000000
 --- !u!1 &4786904412089741833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,7 +1773,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 21.6, y: 33}
-  m_SizeDelta: {x: 32, y: 50}
+  m_SizeDelta: {x: 10, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4786904412367353937
 CanvasRenderer:

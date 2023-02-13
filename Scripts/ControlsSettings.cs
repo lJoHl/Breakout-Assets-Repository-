@@ -100,4 +100,24 @@ public class ControlsSettings : MonoBehaviour
         for (int i = changeKeyObjects.Length - 1, j = 0; i >= 0; i--, j++)
             changeKeyObjects[i].SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controls[j]));
     }
+
+
+
+    public static void ReassingKey(KeyCode control, KeyCode controlKey)
+    {
+        for(int i = 0; i < controls.Length; i++)
+        {
+            if (control == controls[i])
+            {
+                controls[i] = controlKey;
+            }
+            else if (controlKey == controls[i])
+            {
+                controls[i] = control;
+            }
+        }
+
+        SetKeys();
+        MatchButtonsToKeys();
+    }
 }
