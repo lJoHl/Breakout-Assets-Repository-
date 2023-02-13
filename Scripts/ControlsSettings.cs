@@ -98,7 +98,7 @@ public class ControlsSettings : MonoBehaviour
         ChangeKey[] changeKeyObjects = FindObjectsOfType<ChangeKey>();
 
         for (int i = changeKeyObjects.Length - 1, j = 0; i >= 0; i--, j++)
-            changeKeyObjects[i].SetControlButtonText(KeyCodesDictionaries.AssignKeyName(controls[j]));
+            changeKeyObjects[i].SetControlButtonText(KeyCodesDictionary.AssignKeyName(controls[j]));
     }
 
 

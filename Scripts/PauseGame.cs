@@ -39,7 +39,7 @@ public class PauseGame : MonoBehaviour
         // update the pressKeyText
         if (pressKeyText.activeInHierarchy)
         {
-            string keyName = KeyCodesDictionaries.AssignKeyName(ControlsSettings.throwBallKey);
+            string keyName = KeyCodesDictionary.AssignKeyName(ControlsSettings.throwBallKey);
 
             if (keyName.Length == 1) keyName = $"\"{keyName}\"";
             pressKeyText.GetComponent<TextMeshProUGUI>().text = $"Press {keyName}";

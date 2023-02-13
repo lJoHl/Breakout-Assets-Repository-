@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyCodesDictionaries : MonoBehaviour
+public class KeyCodesDictionary : MonoBehaviour
 {
     private static Dictionary<KeyCode, string> keyNames = new();
 
