@@ -73,7 +73,6 @@ public class ControlsSettings : MonoBehaviour
             controls[i] = defaultControls[i];
 
         SetKeys();
-        SaveControls();
     }
 
     private static void SetKeys() //put this code in SetDefaultKeys?

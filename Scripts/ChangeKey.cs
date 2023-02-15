@@ -12,23 +12,38 @@ public class ChangeKey : MonoBehaviour
     private Button controlButton;
 
     private bool buttonSelected;
+    private static bool interactionLock;
 
 
     private void Awake()
     {
         controlButton = GetComponent<Button>();
-
         controlButton.onClick.AddListener(Selected);
+    }
+    private void Start()
+    {
+        interactionLock = false;
+        buttonSelected = false;
+    }
+
+    private void Update()
+    {
+        if (interactionLock)
+        {
+            if (!buttonSelected)
+                controlButton.interactable = false;
+        }
+        else controlButton.interactable = true;
     }
 
 
     public void Selected()
     {
         buttonSelected = true;
+        interactionLock = true;
 
         SetControlButtonText("");
     }
-
 
     private void OnGUI()
     {
@@ -38,11 +53,11 @@ public class ChangeKey : MonoBehaviour
             if (e.isKey)
             {
                 buttonSelected = false;
+                interactionLock = false;
 
                 SetControlKey(e.keyCode);
             }
     }
-
 
     private void SetControlKey(KeyCode controlKey)
     {
@@ -71,5 +86,15 @@ public class ChangeKey : MonoBehaviour
     public void SetControlButtonText(string keyString)
     {
         controlButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = keyString;
+    }
+
+
+
+    public void DeselectAll()
+    {
+        interactionLock = false;
+
+        foreach (ChangeKey controlButton in FindObjectsOfType<ChangeKey>())
+            controlButton.buttonSelected = false;
     }
 }
