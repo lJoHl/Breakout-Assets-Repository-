@@ -6,25 +6,28 @@ using UnityEngine;
 
 public class HighScoresBehaviour : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] names;
-    [SerializeField] private TextMeshProUGUI[] scores;
+    [SerializeField] private TextMeshProUGUI[] namesText;
+    [SerializeField] private TextMeshProUGUI[] scoresText;
 
-    private static int HighScoresLength = 5;
+    private static string[] names = { "bee", "fox", "cat", "pig", "dog" };
+    private static int[] scores = { 1476, 1208, 909, 803, 617 };
 
-    private string dataPath;
+    private static readonly int HighScoresLength = 5;
+
+    private static string dataPath;
 
 
     [System.Serializable] class HighScoresData
     {
         public string[] names = new string[HighScoresLength];
-        public string[] scores = new string[HighScoresLength];
+        public int[] scores = new int[HighScoresLength];
     }
 
 
 
     private void Start()
     {
-        dataPath = Application.persistentDataPath + "/savehighscoresfile.json"; //Move it to SaveHighScores, do it statis?
+        dataPath = Application.persistentDataPath + "/savehighscoresfile.json";
 
         LoadHighScores();
     }
@@ -32,35 +35,34 @@ public class HighScoresBehaviour : MonoBehaviour
     
 
     public void UpdateHighScores(string newName, int newScore)      //inGame Branch
-    {
-        for (int i = 0; i < 5; i++)
+    { 
+        for (int i = 0; i < HighScoresLength; i++)
         {
-            int score = int.Parse(scores[i].text);
-
-            if (newScore > score) // or newScore < score ?
+            if (newScore <= scores[i])
                 continue;
 
-            UpdateHighScores(names[i].text, score);
 
-            names[i].text = newName;
-            scores[i].text = newScore.ToString();
+            UpdateHighScores(names[i], scores[i]);
+
+            scores[i] = newScore;
+            names[i] = newName;
+            break;
         }
     }
-        
+
 
 
     public void SaveHighScores()
     {
         HighScoresData highScoresData = new HighScoresData();
 
-        DataExchange(scores, highScoresData.scores, true);
-        DataExchange(names, highScoresData.names, true);
+        DataExchange(scores, highScoresData.scores);
+        DataExchange(names, highScoresData.names);
 
         string json = JsonUtility.ToJson(highScoresData);
 
         File.WriteAllText(dataPath, json);
     }
-
 
     public void LoadHighScores()
     {
@@ -69,20 +71,37 @@ public class HighScoresBehaviour : MonoBehaviour
             string json = File.ReadAllText(dataPath);
             HighScoresData highScoresData = JsonUtility.FromJson<HighScoresData>(json);
 
-            DataExchange(scores, highScoresData.scores, false);
-            DataExchange(names, highScoresData.names, false);
+            DataExchange(highScoresData.scores, scores);
+            DataExchange(highScoresData.names, names);
+        }
+
+        UpdateHighScoresText();
+    }
+    private void UpdateHighScoresText()
+    {
+        for (int i = 0; i < HighScoresLength; i++)
+        {
+            namesText[i].text = names[i];
+            scoresText[i].text = scores[i].ToString();
         }
     }
 
 
-    private void DataExchange(TextMeshProUGUI[] behaviourArray, string[] dataArray, bool saving)
+    private void DataExchange(string[] dataSender, string[] dataReceiver)
     {
         for (int i = 0; i < HighScoresLength; i++)
-        {
-            if (saving)
-                dataArray[i] = behaviourArray[i].text;
-            else
-                behaviourArray[i].text = dataArray[i];
-        }
+            dataReceiver[i] = dataSender[i];
+    }
+    private void DataExchange(int[] dataSender, int[] dataReceiver)
+    {
+        for (int i = 0; i < HighScoresLength; i++)
+            dataReceiver[i] = dataSender[i];
+    }
+
+
+
+    public static bool NewHighScore(int currentPoints)
+    {
+       return currentPoints > scores[^1];
     }
 }

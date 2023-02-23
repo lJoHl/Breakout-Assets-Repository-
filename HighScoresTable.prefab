@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 53.5, y: -111.949715}
-  m_SizeDelta: {x: 80, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8814067200524627209
 CanvasRenderer:
@@ -306,7 +306,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 53.5, y: -95.449715}
-  m_SizeDelta: {x: 80, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8814067200738219824
 CanvasRenderer:
@@ -441,7 +441,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 53.5, y: -161.44972}
-  m_SizeDelta: {x: 80, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8814067200858283691
 CanvasRenderer:
@@ -787,7 +787,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 53.5, y: -144.94972}
-  m_SizeDelta: {x: 80, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8814067201073532193
 CanvasRenderer:
@@ -922,7 +922,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 53.5, y: -128.44972}
-  m_SizeDelta: {x: 80, y: 50}
+  m_SizeDelta: {x: 110, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8814067201327992951
 CanvasRenderer:
@@ -1285,13 +1285,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 884aa699ed97a9044b6d6f04d51e7880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  names:
+  namesText:
   - {fileID: 8814067200738219825}
   - {fileID: 8814067200524627206}
   - {fileID: 8814067201327992948}
   - {fileID: 8814067201073532190}
   - {fileID: 8814067200858283688}
-  scores:
+  scoresText:
   - {fileID: 8814067200699300219}
   - {fileID: 8814067201576804252}
   - {fileID: 8814067201760772867}
