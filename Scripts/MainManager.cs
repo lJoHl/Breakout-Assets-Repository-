@@ -87,9 +87,9 @@ public class MainManager : MonoBehaviour
 
     private void Update()
     {
-        if (!m_Started)
+        if (Input.GetKeyDown(ControlsSettings.throwBallKey))
         {
-            if (Input.GetKeyDown(ControlsSettings.throwBallKey) & Ball != null)
+            if (!m_Started & Ball != null)
             {
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
@@ -99,10 +99,7 @@ public class MainManager : MonoBehaviour
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
-        }
-        else if (m_GameOver)
-        {
-            if (Input.GetKeyDown(ControlsSettings.throwBallKey))
+            else if (m_GameOver & GameObject.Find(GameOverMenu.name + "(Clone)"))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
@@ -205,7 +202,11 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
 
-        menuManager.OpenMenu(GameOverMenu);   //inGame Branch
+        if (HighScoresBehaviour.NewHighScore(currentPoints))
+            menuManager.OpenMenu(newHighScoreMenu);
+        else
+            menuManager.OpenMenu(GameOverMenu);   //inGame Branch
+
         UpdateLives();  //inGame Branch
     }
 }

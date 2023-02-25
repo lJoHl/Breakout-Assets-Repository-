@@ -28,5 +28,6 @@ public class RecordScore : MonoBehaviour
     public void ConfirmRecord()
     {
         highScoresBehaviour.UpdateHighScores(newName.text, int.Parse(newScore.text));
+        GameObject.Find(name).SetActive(false);
     }
 }
