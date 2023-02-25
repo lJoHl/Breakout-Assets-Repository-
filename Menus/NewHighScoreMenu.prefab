@@ -1138,4 +1138,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newScore: {fileID: 4194024451672899536}
   newName: {fileID: 4194024451498586141}
+  confirmRecord: {fileID: 4194024452004746135}
   highScoresBehaviour: {fileID: 8814067201587564793, guid: d6e1096eb44c4474d93db6ddd97b2ce3, type: 3}

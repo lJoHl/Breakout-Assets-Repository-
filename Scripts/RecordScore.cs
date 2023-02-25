@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RecordScore : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI newScore;
     [SerializeField] private TMP_InputField newName;
+    [SerializeField] private Button confirmRecord;
 
     private MainManager mainManager;
     [SerializeField] private HighScoresBehaviour highScoresBehaviour;
@@ -22,6 +24,8 @@ public class RecordScore : MonoBehaviour
     private void Update()
     {
         newName.Select();
+
+        confirmRecord.interactable = newName.text.Length == newName.characterLimit;
     }
 
 
