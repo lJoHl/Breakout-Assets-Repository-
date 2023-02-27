@@ -23,7 +23,7 @@ public class MainManager : MonoBehaviour
     private bool m_Started;     //inGame Branch
     private int currentPoints;      //inGame Branch
     
-    private bool m_GameOver;    //inGame Branch
+    public bool m_GameOver;    //inGame Branch
 
     [SerializeField] private GameObject newHighScoreMenu;   //inGame Branch
     [SerializeField] private MenuManager menuManager;   //inGame Branch

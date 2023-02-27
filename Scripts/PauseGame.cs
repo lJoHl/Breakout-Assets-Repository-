@@ -27,8 +27,10 @@ public class PauseGame : MonoBehaviour
         if (Input.GetKeyDown(ControlsSettings.pauseKey) & !GameObject.Find("ControlsMenu" + "(Clone)"))
         {
             if (paused)
+            {
                 menuManager.CloseMenu();
-            else
+            }
+            else if (!GetComponent<MainManager>().m_GameOver)
             {
                 menuManager.OpenMenu(pauseMenu);
                 waitingKey = true;
