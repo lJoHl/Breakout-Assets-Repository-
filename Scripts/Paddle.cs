@@ -36,7 +36,7 @@ public class Paddle : MonoBehaviour
         float input = lockLeft ? 1 : lockRight ? -1 : 0;
 
         Vector3 pos = transform.position;
-        pos.x += input * Speed * Time.deltaTime;
+        if (!mainManager.m_GameOver) pos.x += input * Speed * Time.deltaTime;
 
         if (pos.x > MaxMovement)
             pos.x = MaxMovement;
