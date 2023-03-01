@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PauseGame : MonoBehaviour
 {
+    private MainManager mainManager;
+
     [SerializeField] private MenuManager menuManager;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject pressKeyText;
@@ -13,11 +15,17 @@ public class PauseGame : MonoBehaviour
     private bool waitingKey;
 
 
+    private void Start()
+    {
+        mainManager = GetComponent<MainManager>();
+    }
+
+
     private void Update()
     {
         // set game state and time scale, based on the existence of the pauseMenu
         paused = GameObject.Find($"{pauseMenu.name}(Clone)");
-        Time.timeScale = paused | waitingKey ? 0 : 1;
+        Time.timeScale = paused | (waitingKey & mainManager.m_Started) ? 0 : 1;
 
         // pressKeyText is activated when closing a previously open pauseMenu
         if (!paused & waitingKey)
@@ -30,7 +38,7 @@ public class PauseGame : MonoBehaviour
             {
                 menuManager.CloseMenu();
             }
-            else if (!GetComponent<MainManager>().m_GameOver)
+            else if (!mainManager.m_GameOver)
             {
                 menuManager.OpenMenu(pauseMenu);
                 waitingKey = true;

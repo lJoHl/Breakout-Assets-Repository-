@@ -20,7 +20,7 @@ public class MainManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
     [SerializeField] private GameObject GameOverMenu;      //inGame Branch
 
-    private bool m_Started;     //inGame Branch
+    public bool m_Started;     //inGame Branch
     private int currentPoints;      //inGame Branch
     
     public bool m_GameOver;    //inGame Branch
