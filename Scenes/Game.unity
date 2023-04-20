@@ -796,7 +796,7 @@ MonoBehaviour:
   levelText: {fileID: 154427447}
   lives: 1
   life: {fileID: 1233380021804717528, guid: 082c9f29f3ac3b94abb19e72053c2324, type: 3}
-  lifePosXIncrement: 0.3
+  lifePosXIncrement: 0.275
 --- !u!114 &450625943
 MonoBehaviour:
   m_ObjectHideFlags: 0
