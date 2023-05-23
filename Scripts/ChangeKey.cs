@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,12 +18,14 @@ public class ChangeKey : MonoBehaviour
         controlButton = GetComponent<Button>();
         controlButton.onClick.AddListener(Selected);
     }
+
     private void Start()
     {
         interactionLock = false;
         buttonSelected = false;
     }
 
+    // Prevents more than one button from being selected at the same time
     private void Update()
     {
         if (interactionLock)
@@ -45,6 +45,7 @@ public class ChangeKey : MonoBehaviour
         SetControlButtonText("");
     }
 
+    // Assigns the pressed key to the selected button
     private void OnGUI()
     {
         Event e = Event.current;
@@ -87,7 +88,6 @@ public class ChangeKey : MonoBehaviour
     {
         controlButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = keyString;
     }
-
 
 
     public void DeselectAll()

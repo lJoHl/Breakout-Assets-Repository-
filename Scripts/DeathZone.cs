@@ -1,25 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DeathZone : MonoBehaviour
 {
-    private MainManager Manager;    //inGame Branch
+    private MainManager manager;
 
-    private void Start()    //inGame Branch
+    private void Start()
     {
-        Manager = GameObject.Find("MainManager").GetComponent<MainManager>();
+        manager = GameObject.Find("MainManager").GetComponent<MainManager>();
     }
 
     private void OnCollisionEnter(Collision other)
     {
         Destroy(other.gameObject);
-        Manager.lives--;
+        manager.lives--;
 
-        if (Manager.lives > 0)
-            Manager.NewBall();
+        if (manager.lives > 0)
+            manager.NewBall();
         else
-            Manager.GameOver();
+            manager.GameOver();
     }
 }

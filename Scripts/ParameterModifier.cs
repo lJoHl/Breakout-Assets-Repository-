@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +15,11 @@ public class ParameterModifier : MonoBehaviour
         adjustableParameters = GameObject.Find("AdjustableParameters").GetComponent<AdjustableParameters>();
         button = GetComponent<Button>();
 
-        button.onClick.AddListener(ModifierActions);
+        button.onClick.AddListener(ModifierAction);
     }
 
-
-    private void ModifierActions()
+    private void ModifierAction()
     {
-        adjustableParameters.ChangeParameter(parameter, isAnIncrease);
+        adjustableParameters.ModifyParameter(parameter, isAnIncrease);
     }
 }

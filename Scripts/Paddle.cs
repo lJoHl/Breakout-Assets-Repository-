@@ -1,34 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Paddle : MonoBehaviour
 {
-    public float Speed = 2.0f;
-    public float MaxMovement;
-    private const float maxMovementInitialValue = 2.0f;
-
     private MainManager mainManager;
-    private bool rescaled;
+
+    private bool readjusted;
+
+    private const float speed = 2.0f;
+
+    private float maxMovement;
+    private const float maxMovementInitialValue = 2.0f;
 
     private bool lockLeft;
     private bool lockRight;
 
     
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
 
-        MaxMovement = maxMovementInitialValue;
+        maxMovement = maxMovementInitialValue;
     }
 
 
-    // Update is called once per frame
-    void Update()
+    // Handles the movement of the paddle
+    private void Update()
     {
-        Rescale();
-
+        ReadjustMaxMovement();
 
         lockLeft = Input.GetKey(ControlsSettings.moveRightKey) & !lockRight;
         lockRight = Input.GetKey(ControlsSettings.moveLeftKey) & !lockLeft;
@@ -36,28 +34,28 @@ public class Paddle : MonoBehaviour
         float input = lockLeft ? 1 : lockRight ? -1 : 0;
 
         Vector3 pos = transform.position;
-        if (!mainManager.m_GameOver) pos.x += input * Speed * Time.deltaTime;
+        if (!mainManager.m_GameOver) pos.x += input * speed * Time.deltaTime;
 
-        if (pos.x > MaxMovement)
-            pos.x = MaxMovement;
-        else if (pos.x < -MaxMovement)
-            pos.x = -MaxMovement;
+        // Limits the movement
+        if (pos.x > maxMovement)
+            pos.x = maxMovement;
+        else if (pos.x < -maxMovement)
+            pos.x = -maxMovement;
 
         transform.position = pos;
     }
-
-    private void Rescale()
+    private void ReadjustMaxMovement()
     {
         if (transform.childCount > 0)
         {
-            if (!rescaled)
+            if (!readjusted)
             {
-                MaxMovement = maxMovementInitialValue;
-                MaxMovement = mainManager.ChangeDifficultyParameter(MaxMovement, 5, .015f, true);
+                maxMovement = maxMovementInitialValue;
+                maxMovement = mainManager.ChangeDifficultyParameter(maxMovement, 5, .015f, true);
 
-                rescaled = true;
+                readjusted = true;
             }
         }
-        else rescaled = false;
+        else readjusted = false;
     }
 }

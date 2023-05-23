@@ -1,45 +1,43 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
-    public Brick BrickPrefab;
-    public int LineCount = 6;
-    public Rigidbody Ball;
-
-    [SerializeField] private GameObject ballPrefab; //inGame branch
-    private float ballScaleX = .15f;    //inGame branch
-    [SerializeField] private Transform paddle; //inGame branch
-    private Vector3 paddleStartingPosition;     //inGame branch
-    private Vector3 paddleStartingScale;     //inGame branch
-
-    [SerializeField] public TextMeshProUGUI scoreText;     //inGame branch
-    [SerializeField] private GameObject GameOverMenu;      //inGame Branch
-
-    public bool m_Started;     //inGame Branch
-    private int currentPoints;      //inGame Branch
-    
-    public bool m_GameOver;    //inGame Branch
-
-    [SerializeField] private GameObject newHighScoreMenu;   //inGame Branch
-    [SerializeField] private MenuManager menuManager;   //inGame Branch
-
-    [SerializeField] private TextMeshProUGUI levelText;     //inGame Branch
-    private int currentLevel;       //inGame Branch
-
-    public float lives = 1; //inGame Branch
-    [SerializeField] private GameObject life;   //inGame Branch
-    [SerializeField] private float lifePosXIncrement; //inGame Branch
-
-    private ComboBehaviour comboBehaviour;  //inGame Branch
+    private ComboBehaviour comboBehaviour;
     private AdjustableParameters adjustParams;
 
+    public bool m_Started;
+    public bool m_GameOver;
 
-    private void Awake() //inGame Branch
+    public Brick brickPrefab;
+    private readonly int lineCount = 6;
+
+    [SerializeField] private GameObject ballPrefab;
+    private readonly float ballScaleX = .15f;
+    private Rigidbody ball;
+
+    [SerializeField] private Transform paddle;
+    private Vector3 paddleStartingPosition;
+    private Vector3 paddleStartingScale;
+
+    [SerializeField] public TextMeshProUGUI scoreText;
+    private int currentPoints;
+
+    [SerializeField] private TextMeshProUGUI levelText;
+    private int currentLevel;
+
+    [SerializeField] private GameObject life;
+    [SerializeField] private float lifePosXIncrement;
+    public float lives = 1;
+
+    [SerializeField] private MenuManager menuManager;
+    [SerializeField] private GameObject gameOverMenu;
+    [SerializeField] private GameObject newHighScoreMenu;
+
+
+    private void Awake()
     {
         comboBehaviour = gameObject.GetComponent<ComboBehaviour>();
         adjustParams = GameObject.Find("AdjustableParameters").GetComponent<AdjustableParameters>();
@@ -52,32 +50,35 @@ public class MainManager : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
-    void Start()
+    // Prepares the level elements
+    private void Start()
     {
-        NewBall();  //inGame Branch
+        NewBall();
         UpdateLevel();
+        
 
         bool firstBrick = false;
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
-        int[] pointCountArray = new [] {1,1,2,2,5,5};
-        for (int i = 0; i < LineCount; ++i)
+        int[] pointCountArray = {1,1,2,2,5,5};
+
+        // Build the bricks structure
+        for (int i = 0; i < lineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
             {
-                bool noBricks = !firstBrick & x == perLine - 1 & i == LineCount - 1;
-                bool instantiateBrick = currentLevel <= adjustParams.getStartLevel() | Random.value < .5f; //inGame Branch
+                bool noBricks = !firstBrick & x == perLine - 1 & i == lineCount - 1;
+                bool instantiateBrick = currentLevel <= adjustParams.getStartLevel() | Random.value < .5f;
 
-                if (instantiateBrick | noBricks)   //inGame Branch
+                if (instantiateBrick | noBricks)
                 {
-                    Vector3 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
-                    var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
-                    brick.PointValue = pointCountArray[i];
+                    Vector3 position = new(-1.5f + step * x, 2.5f + i * 0.3f, 0);
+                    var brick = Instantiate(brickPrefab, position, Quaternion.identity);
+                    brick.pointValue = pointCountArray[i];
                     brick.onDestroyed.AddListener(AddPoints);
-                    brick.onAllDestroyed.AddListener(LevelCompleted);   //inGame Branch
+                    brick.onAllDestroyed.AddListener(LevelCompleted);
 
                     firstBrick = true;
                 }
@@ -85,21 +86,24 @@ public class MainManager : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
         if (Input.GetKeyDown(ControlsSettings.throwBallKey))
         {
-            if (!m_Started & Ball != null)
+            // Throws the ball
+            if (!m_Started & ball != null)
             {
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
-                Vector3 forceDir = new Vector3(randomDirection, 1, 0);
+                Vector3 forceDir = new(randomDirection, 1, 0);
                 forceDir.Normalize();
 
-                Ball.transform.SetParent(null);
-                Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+                ball.transform.SetParent(null);
+                ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
-            else if (m_GameOver & GameObject.Find(GameOverMenu.name + "(Clone)"))
+            // Starts the game again
+            else if (m_GameOver & GameObject.Find(gameOverMenu.name + "(Clone)"))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
@@ -107,56 +111,55 @@ public class MainManager : MonoBehaviour
     }
 
 
-    public void NewBall()  //inGame Branch
+    public void NewBall()
     {
         m_Started = false;
-        comboBehaviour.breakCombo();
-
+        comboBehaviour.BreakCombo();
         UpdateLives();
+
+        Instantiate(ballPrefab, paddle);
         StartCoroutine(ResetPaddle());
     }
-
-    private IEnumerator ResetPaddle()   //inGame Branch
+    private IEnumerator ResetPaddle()
     {
         paddle.position = paddleStartingPosition;
         paddle.localScale = paddleStartingScale;
 
-        yield return new WaitForSeconds(0);
-
-        Vector3 paddleScale = new Vector3(ChangeDifficultyParameter(paddle.localScale.x, 5, .075f, false), .1f, 1);
+        // Rescales the paddle
+        Vector3 paddleScale = new(ChangeDifficultyParameter(paddle.localScale.x, 5, .075f, false), .1f, 1);
         paddle.localScale = paddleScale;
 
         yield return new WaitForSeconds(0);
 
-        Instantiate(ballPrefab, paddle);
-        Ball = GameObject.Find("Ball(Clone)").GetComponent<Rigidbody>();
+        ball = GameObject.Find("Ball(Clone)").GetComponent<Rigidbody>();
 
-        Vector3 ballScale = new Vector3(ballScaleX / paddle.localScale.x, ballScaleX * 10, ballScaleX);
-        Ball.gameObject.transform.localScale = ballScale;
+        // Rescales the ball
+        Vector3 ballScale = new(ballScaleX / paddle.localScale.x, ballScaleX * 10, ballScaleX);
+        ball.gameObject.transform.localScale = ballScale;
     }
 
 
-    private void AddPoints(int points)      //inGame Branch
+    private void AddPoints(int points)
     {
-        if (comboBehaviour.hasMultiplierReached2) points *= comboBehaviour.getMultiplier(); //inGame Branch
+        if (comboBehaviour.hasMultiplierReached2) points *= comboBehaviour.getMultiplier();
 
-        currentPoints += points;        //inGame Branch
-        scoreText.text = currentPoints.ToString();     //inGame Branch
+        currentPoints += points;
+        scoreText.text = currentPoints.ToString();
 
-        comboBehaviour.increaseMultiplier();
+        comboBehaviour.IncreaseMultiplier();
     }
 
 
-    private void UpdateLives()  //inGame Branch
+    private void UpdateLives()
     {
         foreach (GameObject life in GameObject.FindGameObjectsWithTag("Life"))
             Destroy(life);
 
+        // Determines the position in which lives will be instantiated
         for (float i = 1; i <= lives; i++)
         {
             Vector3 lifePosition = life.transform.position;
             float xIncrement;
-
 
             if (lives % 2 == 0)
                 xIncrement = (Mathf.Ceil(i / 2) * 2 - 1) * lifePosXIncrement / 2;
@@ -171,14 +174,13 @@ public class MainManager : MonoBehaviour
     }
 
 
-    private void UpdateLevel()  //delete?
+    private void UpdateLevel()
     {
-        levelText.text = currentLevel.ToString(); //Update level text
+        levelText.text = currentLevel.ToString();
     }
 
-    public void LevelCompleted()   //inGame Branch
+    private void LevelCompleted()
     {
-        // Change this
         if (lives < adjustParams.getMaxLive()) lives++;
         currentLevel++;
 
@@ -201,12 +203,11 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+        UpdateLives();
 
-        if (HighScoresBehaviour.NewHighScore(currentPoints))
+        if (HighScoresBehaviour.IsItANewHighScore(currentPoints))
             menuManager.OpenMenu(newHighScoreMenu);
         else
-            menuManager.OpenMenu(GameOverMenu);   //inGame Branch
-
-        UpdateLives();  //inGame Branch
+            menuManager.OpenMenu(gameOverMenu);
     }
 }

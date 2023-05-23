@@ -782,21 +782,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d110623a642692246a42fbc2d8d89884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BrickPrefab: {fileID: 897975713663390409, guid: 63f25b9733d2bcd4fa2ff6de1264c739, type: 3}
-  LineCount: 6
-  Ball: {fileID: 0}
+  m_Started: 0
+  m_GameOver: 0
+  brickPrefab: {fileID: 897975713663390409, guid: 63f25b9733d2bcd4fa2ff6de1264c739, type: 3}
   ballPrefab: {fileID: 1782673113202026984, guid: 656f19e7121fe9c418f7b4bbb0658cef, type: 3}
   paddle: {fileID: 97436045}
   scoreText: {fileID: 1118746316}
-  GameOverMenu: {fileID: 3053438862259329417, guid: b284b3ea764f20e4a88749b9c6d8044b, type: 3}
-  m_Started: 0
-  m_GameOver: 0
-  newHighScoreMenu: {fileID: 4194024453439852128, guid: d1fbacc7cc9578d4c874860ce7ba28e8, type: 3}
-  menuManager: {fileID: 1617609287469160368, guid: 5ee25586494963f4eb8658a20b0b4fe7, type: 3}
   levelText: {fileID: 154427447}
-  lives: 1
   life: {fileID: 1233380021804717528, guid: 082c9f29f3ac3b94abb19e72053c2324, type: 3}
   lifePosXIncrement: 0.275
+  lives: 1
+  menuManager: {fileID: 1617609287469160368, guid: 5ee25586494963f4eb8658a20b0b4fe7, type: 3}
+  gameOverMenu: {fileID: 3053438862259329417, guid: b284b3ea764f20e4a88749b9c6d8044b, type: 3}
+  newHighScoreMenu: {fileID: 4194024453439852128, guid: d1fbacc7cc9578d4c874860ce7ba28e8, type: 3}
 --- !u!114 &450625943
 MonoBehaviour:
   m_ObjectHideFlags: 0

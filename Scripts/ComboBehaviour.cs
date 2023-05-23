@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -20,13 +18,13 @@ public class ComboBehaviour : MonoBehaviour
         if (hasMultiplierReached2) multiplierText.text = $"x{multiplier}";
     }
 
-    public void increaseMultiplier()
+    public void IncreaseMultiplier()
     {
         multiplier++;
         UpdateCombo();
     }
 
-    public void breakCombo()
+    public void BreakCombo()
     {
         multiplier = 0;
         UpdateCombo();

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -12,17 +10,16 @@ public class HighScoresBehaviour : MonoBehaviour
     private static string[] names = { "bee", "fox", "cat", "pig", "dog" };
     private static int[] scores = { 1476, 1208, 909, 803, 617 };
 
-    private static readonly int HighScoresLength = 5;
+    private static readonly int highScoresLength = 5;
 
     private static string dataPath;
 
 
     [System.Serializable] class HighScoresData
     {
-        public string[] names = new string[HighScoresLength];
-        public int[] scores = new int[HighScoresLength];
+        public string[] names = new string[highScoresLength];
+        public int[] scores = new int[highScoresLength];
     }
-
 
 
     private void Start()
@@ -32,15 +29,13 @@ public class HighScoresBehaviour : MonoBehaviour
         LoadHighScores();
     }
 
-    
 
-    public void UpdateHighScores(string newName, int newScore)      //inGame Branch
+    public void UpdateHighScores(string newName, int newScore)
     { 
-        for (int i = 0; i < HighScoresLength; i++)
+        for (int i = 0; i < highScoresLength; i++)
         {
             if (newScore <= scores[i])
                 continue;
-
 
             UpdateHighScores(names[i], scores[i]);
 
@@ -51,10 +46,9 @@ public class HighScoresBehaviour : MonoBehaviour
     }
 
 
-
     public void SaveHighScores()
     {
-        HighScoresData highScoresData = new HighScoresData();
+        HighScoresData highScoresData = new();
 
         DataExchange(scores, highScoresData.scores);
         DataExchange(names, highScoresData.names);
@@ -79,7 +73,7 @@ public class HighScoresBehaviour : MonoBehaviour
     }
     private void UpdateHighScoresText()
     {
-        for (int i = 0; i < HighScoresLength; i++)
+        for (int i = 0; i < highScoresLength; i++)
         {
             namesText[i].text = names[i];
             scoresText[i].text = scores[i].ToString();
@@ -89,18 +83,17 @@ public class HighScoresBehaviour : MonoBehaviour
 
     private void DataExchange(string[] dataSender, string[] dataReceiver)
     {
-        for (int i = 0; i < HighScoresLength; i++)
+        for (int i = 0; i < highScoresLength; i++)
             dataReceiver[i] = dataSender[i];
     }
     private void DataExchange(int[] dataSender, int[] dataReceiver)
     {
-        for (int i = 0; i < HighScoresLength; i++)
+        for (int i = 0; i < highScoresLength; i++)
             dataReceiver[i] = dataSender[i];
     }
 
 
-
-    public static bool NewHighScore(int currentPoints)
+    public static bool IsItANewHighScore(int currentPoints)
     {
        return currentPoints > scores[^1];
     }

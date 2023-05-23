@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,8 +10,8 @@ public class AdjustableParameters : MonoBehaviour
     private bool atLowLimit;
     private bool atUpLimit;
 
-    private int[] maxLives = { 1, 2, 3, 4, 5 };
-    private int[] startLevels = { 1, 5, 10, 15, 20 };
+    private readonly int[] maxLives = { 1, 2, 3, 4, 5 };
+    private readonly int[] startLevels = { 1, 5, 10, 15, 20 };
 
     private TextMeshProUGUI livesCounter;
     private TextMeshProUGUI levelsCounter;
@@ -21,6 +19,7 @@ public class AdjustableParameters : MonoBehaviour
     private static AdjustableParameters instance;
 
 
+    // Makes object persist between scenes
     private void Awake()
     {
         if (instance != null)
@@ -33,29 +32,28 @@ public class AdjustableParameters : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-
+    // Updates counters text
     private void Update()
     {
         Scene currentScene = SceneManager.GetActiveScene();
 
         if (currentScene.name == "MainMenu")
         {
-            livesCounter = GetFirstChild("MaxLives").GetComponent<TextMeshProUGUI>();
-            levelsCounter = GetFirstChild("StartLevel").GetComponent<TextMeshProUGUI>();
+            livesCounter = GetParameterCounter("MaxLives").GetComponent<TextMeshProUGUI>();
+            levelsCounter = GetParameterCounter("StartLevel").GetComponent<TextMeshProUGUI>();
 
             livesCounter.text = maxLive.ToString();
             levelsCounter.text = startLevel.ToString();
         }
     }
-
-    private GameObject GetFirstChild(string parentGameObject)
+    private GameObject GetParameterCounter(string parameter)
     {
-        return GameObject.Find(parentGameObject).transform.Find("Counter").gameObject;
+        return GameObject.Find(parameter).transform.Find("Counter").gameObject;
     }
 
 
 
-    public void ChangeParameter(string parameter, bool isAnIncrease)     //cambiar nombre
+    public void ModifyParameter(string parameter, bool isAnIncrease)
     {
         switch (parameter)
         {
@@ -68,7 +66,6 @@ public class AdjustableParameters : MonoBehaviour
                 break;
         }
     }
-
     private int UpdateCounter(int counter, int[] values, bool isAnIncrease)
     {
         atLowLimit = counter == values[0];

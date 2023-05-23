@@ -1,26 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RecordScore : MonoBehaviour
 {
+    private MainManager mainManager;
+    [SerializeField] private HighScoresBehaviour highScoresBehaviour;
+
     [SerializeField] private TextMeshProUGUI newScore;
     [SerializeField] private TMP_InputField newName;
     [SerializeField] private Button confirmRecord;
-
-    private MainManager mainManager;
-    [SerializeField] private HighScoresBehaviour highScoresBehaviour;
 
 
     private void Start()
     {
         mainManager = GameObject.Find("MainManager").GetComponent<MainManager>();
-
         newScore.text = mainManager.scoreText.text;
     }
 
+    // Controls access to interactive elements
     private void Update()
     {
         newName.Select();
@@ -32,6 +30,7 @@ public class RecordScore : MonoBehaviour
     public void ConfirmRecord()
     {
         highScoresBehaviour.UpdateHighScores(newName.text, int.Parse(newScore.text));
-        GameObject.Find(name).SetActive(false);
+
+        gameObject.SetActive(false);
     }
 }

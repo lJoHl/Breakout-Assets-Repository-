@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class PauseGame : MonoBehaviour
 {
     private MainManager mainManager;
-
     [SerializeField] private MenuManager menuManager;
+
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject pressKeyText;
 
@@ -23,7 +21,7 @@ public class PauseGame : MonoBehaviour
 
     private void Update()
     {
-        // set game state and time scale, based on the existence of the pauseMenu
+        // Sets game state and time scale, based on the existence of the pauseMenu
         paused = GameObject.Find($"{pauseMenu.name}(Clone)");
         Time.timeScale = paused | (waitingKey & mainManager.m_Started) ? 0 : 1;
 
@@ -31,7 +29,7 @@ public class PauseGame : MonoBehaviour
         if (!paused & waitingKey)
             pressKeyText.SetActive(true);
 
-        // handles the pauseMenu state, based on the game state. When "esc" is pressed
+        // Handles the pauseMenu state, based on the game state. When "pauseKey" is pressed
         if (Input.GetKeyDown(ControlsSettings.pauseKey) & !GameObject.Find("ControlsMenu" + "(Clone)"))
         {
             if (paused)
@@ -46,7 +44,7 @@ public class PauseGame : MonoBehaviour
         }
 
 
-        // update the pressKeyText
+        // Updates the pressKeyText
         if (pressKeyText.activeInHierarchy)
         {
             string keyName = KeyCodesDictionary.AssignKeyName(ControlsSettings.throwBallKey);
@@ -55,7 +53,7 @@ public class PauseGame : MonoBehaviour
             pressKeyText.GetComponent<TextMeshProUGUI>().text = $"Press {keyName}";
         }
 
-        // disables the pressKeyText
+        // Disables the pressKeyText
         if (Input.GetKeyDown(ControlsSettings.throwBallKey) & !paused)
         {
             pressKeyText.SetActive(false);

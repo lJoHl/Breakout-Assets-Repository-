@@ -1,23 +1,22 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class Brick : MonoBehaviour
 {
     public UnityEvent<int> onDestroyed;
-    public UnityEvent onAllDestroyed;   //inGame Branch
+    public UnityEvent onAllDestroyed;
 
-    public int PointValue;
+    public int pointValue;
 
-    void Start()
+
+    // Assigns a general material with a specific color based on its "pointValue"
+    private void Start()
     {
         var renderer = GetComponentInChildren<Renderer>();
 
-        MaterialPropertyBlock block = new MaterialPropertyBlock();
-        switch (PointValue)
+        MaterialPropertyBlock block = new();
+        switch (pointValue)
         {
             case 1 :
                 block.SetColor("_BaseColor", Color.green);
@@ -35,22 +34,24 @@ public class Brick : MonoBehaviour
         renderer.SetPropertyBlock(block);
     }
 
+
     private void OnCollisionEnter(Collision other)
     {
         tag = "Untagged";
 
-        onDestroyed.Invoke(PointValue);
+        onDestroyed.Invoke(pointValue);
         StartCoroutine(WaitForOnAllDestroyed());
 
-        //slight delay to be sure the ball have time to bounce
+        // Slight delay to be sure the ball have time to bounce
         Destroy(gameObject, 0.2f);
+    }
+    private IEnumerator WaitForOnAllDestroyed()
+    {
+        // Gives the brick time to remove its tag
+        yield return new WaitForSeconds(.1f);
 
-        IEnumerator WaitForOnAllDestroyed()
-        {
-            yield return new WaitForSeconds(.1f);
-
-            if (GameObject.FindGameObjectsWithTag("Brick").Length == 0) //inGame Branch
-                onAllDestroyed.Invoke();    //inGame Branch
-        }
+        // Checks if all bricks have been destroyed
+        if (GameObject.FindGameObjectsWithTag("Brick").Length == 0)
+            onAllDestroyed.Invoke();
     }
 }

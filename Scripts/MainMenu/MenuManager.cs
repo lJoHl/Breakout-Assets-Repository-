@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,17 +8,16 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject screenLock;
 
 
-    private void AssingCanvas()
-    {
-        canvas = GameObject.Find("Canvas");
-    }
-
-
     public void ChangeScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
+
+    private void AssingCanvas()
+    {
+        canvas = GameObject.Find("Canvas");
+    }
 
     public void OpenMenu(GameObject menu)
     {
@@ -30,13 +27,12 @@ public class MenuManager : MonoBehaviour
         Instantiate(menu, canvas.transform);
     }
 
-
     public void CloseMenu()
     {
         AssingCanvas();
 
         foreach (Transform child in canvas.transform)
-            if(child.gameObject.tag == "MenuElement")
+            if(child.gameObject.CompareTag("MenuElement"))
                 Destroy(child.gameObject);
     }
 }

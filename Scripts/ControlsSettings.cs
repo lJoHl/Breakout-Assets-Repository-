@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -23,7 +21,6 @@ public class ControlsSettings : MonoBehaviour
         public KeyCode throwBallKey;
         public KeyCode pauseKey;
     }
-
 
 
     private void Start()
@@ -75,7 +72,7 @@ public class ControlsSettings : MonoBehaviour
         SetKeys();
     }
 
-    private static void SetKeys() //put this code in SetDefaultKeys?
+    private static void SetKeys()
     {
         moveLeftKey = controls[0];
         moveRightKey = controls[1];
@@ -99,8 +96,6 @@ public class ControlsSettings : MonoBehaviour
         for (int i = changeKeyObjects.Length - 1, j = 0; i >= 0; i--, j++)
             changeKeyObjects[i].SetControlButtonText(KeyCodesDictionary.AssignKeyName(controls[j]));
     }
-
-
 
     public static void ReassingKey(KeyCode control, KeyCode controlKey)
     {
