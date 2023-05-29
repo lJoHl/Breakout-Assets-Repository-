@@ -28,8 +28,10 @@ public class MainManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     private int currentLevel;
 
+    [SerializeField] private Camera mainCamera;
     [SerializeField] private GameObject life;
     [SerializeField] private float lifePosXIncrement;
+    private Vector3 livesPosition;
     public float lives = 1;
 
     [SerializeField] private MenuManager menuManager;
@@ -44,6 +46,9 @@ public class MainManager : MonoBehaviour
 
         paddleStartingPosition = paddle.position;
         paddleStartingScale = paddle.localScale;
+
+        livesPosition = mainCamera.ScreenToWorldPoint(GameObject.Find("Lives").transform.position);
+        livesPosition.z = 0;
 
         currentLevel = adjustParams.getStartLevel();
         ControlsSettings.LoadControls();
@@ -152,13 +157,14 @@ public class MainManager : MonoBehaviour
 
     private void UpdateLives()
     {
+        // Delete the previous position of lives
         foreach (GameObject life in GameObject.FindGameObjectsWithTag("Life"))
             Destroy(life);
 
         // Determines the position in which lives will be instantiated
         for (float i = 1; i <= lives; i++)
         {
-            Vector3 lifePosition = life.transform.position;
+            Vector3 lifePosition = livesPosition;
             float xIncrement;
 
             if (lives % 2 == 0)
